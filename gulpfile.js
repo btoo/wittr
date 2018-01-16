@@ -49,7 +49,8 @@ function createBundle(src) {
   var b = watchify(browserify(opts));
 
   b.transform(babelify.configure({
-    stage: 1
+    presets: ["env", "stage-0"],
+    plugins: ["transform-runtime"]
   }));
 
   b.transform(hbsfy);
@@ -96,7 +97,10 @@ gulp.task('js:browser', function () {
 gulp.task('js:server', function () {
   return gulp.src('server/**/*.js')
     .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.babel({stage: 1}))
+    .pipe(plugins.babel({
+      presets: ["env", "stage-0"],
+      plugins: ["transform-runtime"]
+    }))
     .on('error', plugins.util.log.bind(plugins.util))
     .pipe(plugins.sourcemaps.write('.'))
     .pipe(gulp.dest('build/server'));
